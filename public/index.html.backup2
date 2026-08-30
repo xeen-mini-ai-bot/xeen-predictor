@@ -1,0 +1,3113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+  >
+
+  <title>Xeen Ai Mini Predictor</title>
+
+  <meta
+    name="theme-color"
+    content="#050a16"
+  >
+
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    :root {
+      --bg: #030712;
+      --panel: rgba(10, 19, 38, .78);
+      --panel-2: rgba(14, 27, 51, .82);
+      --blue: #1683ff;
+      --blue-2: #42b7ff;
+      --cyan: #00e5ff;
+      --white: #f7fbff;
+      --muted: #8fa5c5;
+      --line: rgba(74, 137, 220, .18);
+      --gold: #ffd84d;
+      --danger: #ff5573;
+      --success: #38e89a;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+      background: var(--bg);
+      color: var(--white);
+      font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+    }
+
+    body {
+      overflow-x: hidden;
+      background:
+        radial-gradient(
+          circle at 50% -10%,
+          rgba(15, 118, 255, .20),
+          transparent 38%
+        ),
+        radial-gradient(
+          circle at 100% 60%,
+          rgba(0, 183, 255, .08),
+          transparent 30%
+        ),
+        #030712;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+      color: inherit;
+    }
+
+    .app {
+      width: min(100%, 520px);
+      margin: auto;
+      padding: 20px 16px 100px;
+    }
+
+    /* HEADER */
+
+    .header {
+      text-align: center;
+      padding: 10px 0 22px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      color: white;
+      background:
+        linear-gradient(
+          145deg,
+          #0c72ff,
+          #16baff
+        );
+      box-shadow:
+        0 0 22px rgba(18, 133, 255, .5);
+    }
+
+    .brand-text {
+      text-align: left;
+    }
+
+    .brand-title {
+      font-size: 21px;
+      font-weight: 900;
+      letter-spacing: -.6px;
+    }
+
+    .brand-subtitle {
+      color: var(--muted);
+      font-size: 11px;
+      margin-top: 2px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    /* USER CARD */
+
+    .user-card {
+      position: relative;
+      overflow: hidden;
+      padding: 19px;
+      border-radius: 23px;
+      border: 1px solid var(--line);
+      background:
+        linear-gradient(
+          145deg,
+          rgba(16, 35, 68, .88),
+          rgba(5, 14, 29, .84)
+        );
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.04),
+        0 18px 50px rgba(0,0,0,.24),
+        0 0 35px rgba(0,102,255,.08);
+    }
+
+    .user-card::before {
+      content: "";
+      position: absolute;
+      width: 170px;
+      height: 170px;
+      top: -110px;
+      right: -70px;
+      background: var(--blue);
+      filter: blur(70px);
+      opacity: .22;
+    }
+
+    .user-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .label {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.3px;
+      text-transform: uppercase;
+    }
+
+    .user-id {
+      margin-top: 5px;
+      font-size: 20px;
+      font-weight: 900;
+      letter-spacing: 1px;
+    }
+
+    .coin-box {
+      text-align: right;
+    }
+
+    .coin {
+      margin-top: 5px;
+      font-size: 21px;
+      font-weight: 900;
+    }
+
+    .coin-icon {
+      color: var(--gold);
+    }
+
+    .copy-btn {
+      margin-top: 14px;
+      padding: 8px 13px;
+      border-radius: 10px;
+      color: #a8d7ff;
+      background: rgba(26, 125, 255, .10);
+      border: 1px solid rgba(41, 146, 255, .2);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    /* SECTION */
+
+    .section {
+      margin-top: 24px;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .section-title h2 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 900;
+    }
+
+    .badge {
+      padding: 6px 9px;
+      border-radius: 9px;
+      color: #83c9ff;
+      background: rgba(15, 116, 255, .10);
+      border: 1px solid rgba(35, 136, 255, .17);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .7px;
+    }
+
+    /* GAME CARD */
+
+    .game-card {
+      padding: 17px;
+      border-radius: 22px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      box-shadow:
+        0 15px 40px rgba(0,0,0,.2);
+    }
+
+    .game-name {
+      font-size: 17px;
+      font-weight: 900;
+      margin-bottom: 14px;
+    }
+
+    .modes {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .mode {
+      min-height: 48px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.035);
+      border: 1px solid rgba(255,255,255,.07);
+      color: #92a7c7;
+      font-size: 14px;
+      font-weight: 900;
+      transition:
+        transform .18s ease,
+        background .22s ease,
+        border-color .22s ease,
+        box-shadow .22s ease,
+        color .22s ease;
+    }
+
+    .mode:active {
+      transform: scale(.96);
+    }
+
+    .mode.active {
+      color: white;
+      background:
+        linear-gradient(
+          145deg,
+          rgba(10, 123, 255, .95),
+          rgba(12, 76, 193, .9)
+        );
+      border-color: rgba(75, 175, 255, .65);
+      box-shadow:
+        0 0 24px rgba(14, 125, 255, .30),
+        inset 0 1px 0 rgba(255,255,255,.16);
+    }
+
+    .play-btn {
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      margin-top: 14px;
+      min-height: 52px;
+      border-radius: 15px;
+      background:
+        linear-gradient(
+          135deg,
+          #0877ff,
+          #15a8ff
+        );
+      color: white;
+      font-size: 15px;
+      font-weight: 900;
+      box-shadow:
+        0 12px 28px rgba(0, 113, 255, .25),
+        0 0 20px rgba(0, 137, 255, .15);
+      transition:
+        transform .15s ease,
+        box-shadow .2s ease;
+    }
+
+    .play-btn:hover {
+      box-shadow:
+        0 14px 32px rgba(0, 113, 255, .35),
+        0 0 28px rgba(0, 137, 255, .22);
+    }
+
+    .play-btn:active {
+      transform: scale(.97);
+    }
+
+    /* RIPPLE */
+
+    .ripple {
+      position: absolute;
+      border-radius: 50%;
+      transform: scale(0);
+      animation: ripple .55s linear;
+      background: rgba(255,255,255,.35);
+      pointer-events: none;
+    }
+
+    @keyframes ripple {
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
+    }
+
+    /* CONTACT */
+
+    .contact {
+      margin-top: 30px;
+      text-align: center;
+    }
+
+    .contact-btn {
+      width: 100%;
+      min-height: 49px;
+      border-radius: 15px;
+      background: rgba(18, 102, 214, .08);
+      border: 1px solid rgba(54, 147, 255, .18);
+      color: #a8d8ff;
+      font-size: 13px;
+      font-weight: 900;
+      transition: .2s ease;
+    }
+
+    .contact-btn:active {
+      transform: scale(.97);
+    }
+
+    .footer {
+      margin-top: 14px;
+      text-align: center;
+      color: #58708f;
+      font-size: 10px;
+      letter-spacing: 1px;
+    }
+
+    /* DEVELOPER */
+
+    .developer {
+      position: fixed;
+      z-index: 20;
+      right: 17px;
+      bottom: 18px;
+      width: 49px;
+      height: 49px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background:
+        linear-gradient(
+          145deg,
+          #0878ff,
+          #13b3ff
+        );
+      box-shadow:
+        0 0 25px rgba(0, 133, 255, .42);
+      font-size: 18px;
+      font-weight: 900;
+      transition: transform .18s ease;
+    }
+
+    .developer:active {
+      transform: scale(.9);
+    }
+
+    /* TOAST */
+
+    .toast-wrap {
+      position: fixed;
+      z-index: 100;
+      left: 50%;
+      bottom: 82px;
+      width: min(92%, 380px);
+      transform: translateX(-50%);
+      pointer-events: none;
+    }
+
+    .toast {
+      opacity: 0;
+      transform: translateY(18px) scale(.96);
+      padding: 13px 15px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.09);
+      background: rgba(8, 17, 34, .94);
+      box-shadow:
+        0 15px 40px rgba(0,0,0,.35),
+        0 0 24px rgba(0,115,255,.12);
+      color: white;
+      font-size: 13px;
+      font-weight: 800;
+      text-align: center;
+      transition: .25s ease;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    /* LOADER */
+
+    .loader {
+      position: fixed;
+      z-index: 200;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      background: #030712;
+      transition: opacity .3s ease;
+    }
+
+    .loader.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .loader-box {
+      text-align: center;
+    }
+
+    .spinner {
+      width: 42px;
+      height: 42px;
+      margin: auto;
+      border: 3px solid rgba(255,255,255,.08);
+      border-top-color: var(--blue-2);
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+    }
+
+    .loader-text {
+      margin-top: 13px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* GAME VIEW */
+
+    .game-view {
+      position: fixed;
+      z-index: 80;
+      inset: 0;
+      display: none;
+      background: #000;
+    }
+
+    .game-view.open {
+      display: block;
+      animation: gameIn .22s ease;
+    }
+
+    @keyframes gameIn {
+      from {
+        opacity: 0;
+        transform: scale(.98);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .game-frame {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+      background: #000;
+    }
+
+    .game-top {
+      position: absolute;
+      z-index: 3;
+      top: 13px;
+      right: 13px;
+      display: flex;
+      gap: 9px;
+    }
+
+    .game-control {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: rgba(6, 15, 30, .82);
+      border: 1px solid rgba(87, 163, 255, .22);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 0 20px rgba(0,100,255,.13);
+      font-size: 20px;
+      font-weight: 900;
+    }
+
+    .game-control:active {
+      transform: scale(.92);
+    }
+
+    /* AI PANEL */
+
+    .ai-panel {
+      position: absolute;
+      z-index: 10;
+      left: 50%;
+      bottom: 17px;
+      width: min(92%, 380px);
+      padding: 17px;
+      transform: translate(-50%, 130%);
+      border-radius: 23px;
+      border: 1px solid rgba(54, 148, 255, .25);
+      background:
+        linear-gradient(
+          145deg,
+          rgba(8, 20, 41, .96),
+          rgba(4, 11, 24, .95)
+        );
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+      box-shadow:
+        0 -5px 45px rgba(0, 104, 255, .14),
+        0 20px 60px rgba(0,0,0,.45);
+      transition: transform .32s cubic-bezier(.2,.85,.2,1);
+    }
+
+    .ai-panel.open {
+      transform: translate(-50%, 0);
+    }
+
+    .ai-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .ai-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 900;
+      font-size: 16px;
+    }
+
+    .ai-star {
+      color: #69c7ff;
+      text-shadow: 0 0 13px #1683ff;
+    }
+
+    .ai-close {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      background: rgba(255,255,255,.05);
+      color: #9cb1ce;
+      font-size: 18px;
+    }
+
+    .input-label {
+      display: block;
+      margin-bottom: 7px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .round-input {
+      width: 100%;
+      height: 51px;
+      padding: 0 14px;
+      border-radius: 14px;
+      outline: none;
+      color: white;
+      background: rgba(255,255,255,.045);
+      border: 1px solid rgba(255,255,255,.09);
+      font-size: 17px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      transition: .2s ease;
+    }
+
+    .round-input:focus {
+      border-color: rgba(35, 143, 255, .7);
+      box-shadow:
+        0 0 0 3px rgba(14, 120, 255, .08),
+        0 0 20px rgba(14, 120, 255, .12);
+    }
+
+    .analyze-btn {
+      width: 100%;
+      height: 51px;
+      margin-top: 11px;
+      border-radius: 14px;
+      background:
+        linear-gradient(
+          135deg,
+          #0878ff,
+          #16a9ff
+        );
+      font-weight: 900;
+      box-shadow:
+        0 10px 26px rgba(0, 113, 255, .23);
+    }
+
+    .analyze-btn:active {
+      transform: scale(.97);
+    }
+
+    .analyze-btn.loading {
+      opacity: .65;
+      pointer-events: none;
+    }
+
+    /* RESULT */
+
+    .result {
+      display: none;
+      margin-top: 13px;
+      padding: 15px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.035);
+      animation: resultIn .35s ease;
+    }
+
+    .result.show {
+      display: block;
+    }
+
+    @keyframes resultIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px) scale(.97);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .result-main {
+      text-align: center;
+      padding: 9px 0 14px;
+    }
+
+    .prediction {
+      font-size: 36px;
+      font-weight: 1000;
+      letter-spacing: 1px;
+    }
+
+    .prediction.big {
+      color: var(--gold);
+      text-shadow: 0 0 25px rgba(255, 216, 77, .55);
+    }
+
+    .prediction.small {
+      color: #51caff;
+      text-shadow: 0 0 25px rgba(34, 180, 255, .45);
+    }
+
+    .prediction.none {
+      color: #a8b7ca;
+    }
+
+    .percent {
+      margin-top: 2px;
+      font-size: 15px;
+      font-weight: 900;
+      color: #d9e8fb;
+    }
+
+    .result-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 7px;
+    }
+
+    .stat {
+      padding: 10px 7px;
+      text-align: center;
+      border-radius: 12px;
+      background: rgba(255,255,255,.035);
+    }
+
+    .stat-label {
+      color: #7188a6;
+      font-size: 9px;
+      font-weight: 800;
+    }
+
+    .stat-value {
+      margin-top: 4px;
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    /* DIGITS */
+
+    .digits {
+      margin-top: 13px;
+    }
+
+    .digits-title {
+      margin-bottom: 8px;
+      color: #91a6c2;
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .8px;
+      text-transform: uppercase;
+    }
+
+    .digit-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+    }
+
+    .digit {
+      padding: 7px 3px;
+      border-radius: 9px;
+      background: rgba(255,255,255,.035);
+      text-align: center;
+    }
+
+    .digit-number {
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .digit-percent {
+      margin-top: 2px;
+      color: #75baff;
+      font-size: 8px;
+      font-weight: 800;
+    }
+
+    .digit-count {
+      color: #617995;
+      font-size: 8px;
+    }
+
+    /* RESPONSIVE */
+
+    @media (min-width: 700px) {
+      .app {
+        padding-top: 35px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- LOADER -->
+  <div class="loader" id="loader">
+    <div class="loader-box">
+      <div class="spinner"></div>
+      <div class="loader-text">
+        Xeen AI Initializing...
+      </div>
+    </div>
+  </div>
+
+  <main class="app">
+
+    <!-- HEADER -->
+    <header class="header">
+      <div class="brand">
+        <div class="brand-icon">✦</div>
+
+        <div class="brand-text">
+          <div class="brand-title">
+            Xeen Ai Mini Predictor
+          </div>
+
+          <div class="brand-subtitle">
+            Premium Prediction System
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- USER -->
+    <section class="user-card">
+
+      <div class="user-row">
+
+        <div>
+          <div class="label">
+            User ID
+          </div>
+
+          <div
+            class="user-id"
+            id="userId"
+          >
+            Loading...
+          </div>
+        </div>
+
+        <div class="coin-box">
+          <div class="label">
+            Coin
+          </div>
+
+          <div
+            class="coin"
+            id="coin"
+          >
+            <span class="coin-icon">🪙</span>
+            0
+          </div>
+        </div>
+
+      </div>
+
+      <button
+        class="copy-btn"
+        id="copyBtn"
+      >
+        Copy User ID
+      </button>
+
+    </section>
+
+    <!-- 777 BIG WIN -->
+    <section class="section">
+
+      <div class="section-title">
+        <h2>777 Big Win</h2>
+        <div class="badge">PREMIUM</div>
+      </div>
+
+      <div class="game-card">
+
+        <div class="game-name">
+          777 Big Win
+        </div>
+
+        <div
+          class="modes"
+          id="bigwinModes"
+        >
+          <button
+            class="mode active"
+            data-mode="WINGO"
+          >
+            WINGO
+          </button>
+
+          <button
+            class="mode"
+            data-mode="TRX"
+          >
+            TRX
+          </button>
+        </div>
+
+        <button
+          class="play-btn ripple-btn"
+          id="bigwinPlay"
+        >
+          Play Game
+        </button>
+
+      </div>
+
+    </section>
+
+    <!-- MINI GAME -->
+    <section class="section">
+
+      <div class="section-title">
+        <h2>Mini Game</h2>
+        <div class="badge">AI READY</div>
+      </div>
+
+      <div class="game-card">
+
+        <div class="game-name">
+          Mini Game
+        </div>
+
+        <div
+          class="modes"
+          id="miniModes"
+        >
+          <button
+            class="mode active"
+            data-mode="WINGO"
+          >
+            WINGO
+          </button>
+
+          <button
+            class="mode"
+            data-mode="TRX"
+          >
+            TRX
+          </button>
+        </div>
+
+        <button
+          class="play-btn ripple-btn"
+          id="miniPlay"
+        >
+          Play Game
+        </button>
+
+      </div>
+
+    </section>
+
+    <!-- CONTACT -->
+    <section class="contact">
+
+      <button
+        class="contact-btn ripple-btn"
+        id="adminContact"
+      >
+        Admin ကိုဆက်သွယ်ရန်
+      </button>
+
+      <div class="footer">
+        XEEN AI • PREMIUM SYSTEM
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- DEVELOPER -->
+  <button
+    class="developer"
+    id="developerBtn"
+    aria-label="Developer"
+  >
+    ⌘
+  </button>
+
+  <!-- TOAST -->
+  <div class="toast-wrap">
+    <div
+      class="toast"
+      id="toast"
+    ></div>
+  </div>
+
+  <!-- FULLSCREEN GAME -->
+  <div
+    class="game-view"
+    id="gameView"
+  >
+
+    <iframe
+      class="game-frame"
+      id="gameFrame"
+      title="Game"
+      allow="fullscreen; autoplay"
+    ></iframe>
+
+    <div class="game-top">
+
+      <button
+        class="game-control"
+        id="aiBtn"
+        aria-label="AI Predictor"
+      >
+        ✦
+      </button>
+
+      <button
+        class="game-control"
+        id="gameClose"
+        aria-label="Close"
+      >
+        ×
+      </button>
+
+    </div>
+
+    <!-- AI PANEL -->
+    <div
+      class="ai-panel"
+      id="aiPanel"
+    >
+
+      <div class="ai-head">
+
+        <div class="ai-title">
+          <span class="ai-star">✦</span>
+          AI Predictor
+        </div>
+
+        <button
+          class="ai-close"
+          id="aiClose"
+        >
+          ×
+        </button>
+
+      </div>
+
+      <label
+        class="input-label"
+        for="roundInput"
+      >
+        Period / Round ID — Enter last 2 digits
+      </label>
+
+      <input
+        id="roundInput"
+        class="round-input"
+        type="text"
+        inputmode="numeric"
+        autocomplete="off"
+        maxlength="2"
+        placeholder="32"
+      >
+
+      <button
+        class="analyze-btn ripple-btn"
+cat > public/index.html <<'EOF'
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+  >
+
+  <title>Xeen Ai Mini Predictor</title>
+
+  <meta
+    name="theme-color"
+    content="#050a16"
+  >
+
+  <style>
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    :root {
+      --bg: #030712;
+      --panel: rgba(10, 19, 38, .78);
+      --panel-2: rgba(14, 27, 51, .82);
+      --blue: #1683ff;
+      --blue-2: #42b7ff;
+      --cyan: #00e5ff;
+      --white: #f7fbff;
+      --muted: #8fa5c5;
+      --line: rgba(74, 137, 220, .18);
+      --gold: #ffd84d;
+      --danger: #ff5573;
+      --success: #38e89a;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+      background: var(--bg);
+      color: var(--white);
+      font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+    }
+
+    body {
+      overflow-x: hidden;
+      background:
+        radial-gradient(
+          circle at 50% -10%,
+          rgba(15, 118, 255, .20),
+          transparent 38%
+        ),
+        radial-gradient(
+          circle at 100% 60%,
+          rgba(0, 183, 255, .08),
+          transparent 30%
+        ),
+        #030712;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+      color: inherit;
+    }
+
+    .app {
+      width: min(100%, 520px);
+      margin: auto;
+      padding: 20px 16px 100px;
+    }
+
+    /* HEADER */
+
+    .header {
+      text-align: center;
+      padding: 10px 0 22px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      color: white;
+      background:
+        linear-gradient(
+          145deg,
+          #0c72ff,
+          #16baff
+        );
+      box-shadow:
+        0 0 22px rgba(18, 133, 255, .5);
+    }
+
+    .brand-text {
+      text-align: left;
+    }
+
+    .brand-title {
+      font-size: 21px;
+      font-weight: 900;
+      letter-spacing: -.6px;
+    }
+
+    .brand-subtitle {
+      color: var(--muted);
+      font-size: 11px;
+      margin-top: 2px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    /* USER CARD */
+
+    .user-card {
+      position: relative;
+      overflow: hidden;
+      padding: 19px;
+      border-radius: 23px;
+      border: 1px solid var(--line);
+      background:
+        linear-gradient(
+          145deg,
+          rgba(16, 35, 68, .88),
+          rgba(5, 14, 29, .84)
+        );
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.04),
+        0 18px 50px rgba(0,0,0,.24),
+        0 0 35px rgba(0,102,255,.08);
+    }
+
+    .user-card::before {
+      content: "";
+      position: absolute;
+      width: 170px;
+      height: 170px;
+      top: -110px;
+      right: -70px;
+      background: var(--blue);
+      filter: blur(70px);
+      opacity: .22;
+    }
+
+    .user-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .label {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.3px;
+      text-transform: uppercase;
+    }
+
+    .user-id {
+      margin-top: 5px;
+      font-size: 20px;
+      font-weight: 900;
+      letter-spacing: 1px;
+    }
+
+    .coin-box {
+      text-align: right;
+    }
+
+    .coin {
+      margin-top: 5px;
+      font-size: 21px;
+      font-weight: 900;
+    }
+
+    .coin-icon {
+      color: var(--gold);
+    }
+
+    .copy-btn {
+      margin-top: 14px;
+      padding: 8px 13px;
+      border-radius: 10px;
+      color: #a8d7ff;
+      background: rgba(26, 125, 255, .10);
+      border: 1px solid rgba(41, 146, 255, .2);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    /* SECTION */
+
+    .section {
+      margin-top: 24px;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .section-title h2 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 900;
+    }
+
+    .badge {
+      padding: 6px 9px;
+      border-radius: 9px;
+      color: #83c9ff;
+      background: rgba(15, 116, 255, .10);
+      border: 1px solid rgba(35, 136, 255, .17);
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .7px;
+    }
+
+    /* GAME CARD */
+
+    .game-card {
+      padding: 17px;
+      border-radius: 22px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      box-shadow:
+        0 15px 40px rgba(0,0,0,.2);
+    }
+
+    .game-name {
+      font-size: 17px;
+      font-weight: 900;
+      margin-bottom: 14px;
+    }
+
+    .modes {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .mode {
+      min-height: 48px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.035);
+      border: 1px solid rgba(255,255,255,.07);
+      color: #92a7c7;
+      font-size: 14px;
+      font-weight: 900;
+      transition:
+        transform .18s ease,
+        background .22s ease,
+        border-color .22s ease,
+        box-shadow .22s ease,
+        color .22s ease;
+    }
+
+    .mode:active {
+      transform: scale(.96);
+    }
+
+    .mode.active {
+      color: white;
+      background:
+        linear-gradient(
+          145deg,
+          rgba(10, 123, 255, .95),
+          rgba(12, 76, 193, .9)
+        );
+      border-color: rgba(75, 175, 255, .65);
+      box-shadow:
+        0 0 24px rgba(14, 125, 255, .30),
+        inset 0 1px 0 rgba(255,255,255,.16);
+    }
+
+    .play-btn {
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      margin-top: 14px;
+      min-height: 52px;
+      border-radius: 15px;
+      background:
+        linear-gradient(
+          135deg,
+          #0877ff,
+          #15a8ff
+        );
+      color: white;
+      font-size: 15px;
+      font-weight: 900;
+      box-shadow:
+        0 12px 28px rgba(0, 113, 255, .25),
+        0 0 20px rgba(0, 137, 255, .15);
+      transition:
+        transform .15s ease,
+        box-shadow .2s ease;
+    }
+
+    .play-btn:hover {
+      box-shadow:
+        0 14px 32px rgba(0, 113, 255, .35),
+        0 0 28px rgba(0, 137, 255, .22);
+    }
+
+    .play-btn:active {
+      transform: scale(.97);
+    }
+
+    /* RIPPLE */
+
+    .ripple {
+      position: absolute;
+      border-radius: 50%;
+      transform: scale(0);
+      animation: ripple .55s linear;
+      background: rgba(255,255,255,.35);
+      pointer-events: none;
+    }
+
+    @keyframes ripple {
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
+    }
+
+    /* CONTACT */
+
+    .contact {
+      margin-top: 30px;
+      text-align: center;
+    }
+
+    .contact-btn {
+      width: 100%;
+      min-height: 49px;
+      border-radius: 15px;
+      background: rgba(18, 102, 214, .08);
+      border: 1px solid rgba(54, 147, 255, .18);
+      color: #a8d8ff;
+      font-size: 13px;
+      font-weight: 900;
+      transition: .2s ease;
+    }
+
+    .contact-btn:active {
+      transform: scale(.97);
+    }
+
+    .footer {
+      margin-top: 14px;
+      text-align: center;
+      color: #58708f;
+      font-size: 10px;
+      letter-spacing: 1px;
+    }
+
+    /* DEVELOPER */
+
+    .developer {
+      position: fixed;
+      z-index: 20;
+      right: 17px;
+      bottom: 18px;
+      width: 49px;
+      height: 49px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background:
+        linear-gradient(
+          145deg,
+          #0878ff,
+          #13b3ff
+        );
+      box-shadow:
+        0 0 25px rgba(0, 133, 255, .42);
+      font-size: 18px;
+      font-weight: 900;
+      transition: transform .18s ease;
+    }
+
+    .developer:active {
+      transform: scale(.9);
+    }
+
+    /* TOAST */
+
+    .toast-wrap {
+      position: fixed;
+      z-index: 100;
+      left: 50%;
+      bottom: 82px;
+      width: min(92%, 380px);
+      transform: translateX(-50%);
+      pointer-events: none;
+    }
+
+    .toast {
+      opacity: 0;
+      transform: translateY(18px) scale(.96);
+      padding: 13px 15px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.09);
+      background: rgba(8, 17, 34, .94);
+      box-shadow:
+        0 15px 40px rgba(0,0,0,.35),
+        0 0 24px rgba(0,115,255,.12);
+      color: white;
+      font-size: 13px;
+      font-weight: 800;
+      text-align: center;
+      transition: .25s ease;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    /* LOADER */
+
+    .loader {
+      position: fixed;
+      z-index: 200;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      background: #030712;
+      transition: opacity .3s ease;
+    }
+
+    .loader.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .loader-box {
+      text-align: center;
+    }
+
+    .spinner {
+      width: 42px;
+      height: 42px;
+      margin: auto;
+      border: 3px solid rgba(255,255,255,.08);
+      border-top-color: var(--blue-2);
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+    }
+
+    .loader-text {
+      margin-top: 13px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* GAME VIEW */
+
+    .game-view {
+      position: fixed;
+      z-index: 80;
+      inset: 0;
+      display: none;
+      background: #000;
+    }
+
+    .game-view.open {
+      display: block;
+      animation: gameIn .22s ease;
+    }
+
+    @keyframes gameIn {
+      from {
+        opacity: 0;
+        transform: scale(.98);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .game-frame {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+      background: #000;
+    }
+
+    .game-top {
+      position: absolute;
+      z-index: 3;
+      top: 13px;
+      right: 13px;
+      display: flex;
+      gap: 9px;
+    }
+
+    .game-control {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: rgba(6, 15, 30, .82);
+      border: 1px solid rgba(87, 163, 255, .22);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 0 20px rgba(0,100,255,.13);
+      font-size: 20px;
+      font-weight: 900;
+    }
+
+    .game-control:active {
+      transform: scale(.92);
+    }
+
+    /* AI PANEL */
+
+    .ai-panel {
+      position: absolute;
+      z-index: 10;
+      left: 50%;
+      bottom: 17px;
+      width: min(92%, 380px);
+      padding: 17px;
+      transform: translate(-50%, 130%);
+      border-radius: 23px;
+      border: 1px solid rgba(54, 148, 255, .25);
+      background:
+        linear-gradient(
+          145deg,
+          rgba(8, 20, 41, .96),
+          rgba(4, 11, 24, .95)
+        );
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+      box-shadow:
+        0 -5px 45px rgba(0, 104, 255, .14),
+        0 20px 60px rgba(0,0,0,.45);
+      transition: transform .32s cubic-bezier(.2,.85,.2,1);
+    }
+
+    .ai-panel.open {
+      transform: translate(-50%, 0);
+    }
+
+    .ai-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .ai-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 900;
+      font-size: 16px;
+    }
+
+    .ai-star {
+      color: #69c7ff;
+      text-shadow: 0 0 13px #1683ff;
+    }
+
+    .ai-close {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      background: rgba(255,255,255,.05);
+      color: #9cb1ce;
+      font-size: 18px;
+    }
+
+    .input-label {
+      display: block;
+      margin-bottom: 7px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    .round-input {
+      width: 100%;
+      height: 51px;
+      padding: 0 14px;
+      border-radius: 14px;
+      outline: none;
+      color: white;
+      background: rgba(255,255,255,.045);
+      border: 1px solid rgba(255,255,255,.09);
+      font-size: 17px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      transition: .2s ease;
+    }
+
+    .round-input:focus {
+      border-color: rgba(35, 143, 255, .7);
+      box-shadow:
+        0 0 0 3px rgba(14, 120, 255, .08),
+        0 0 20px rgba(14, 120, 255, .12);
+    }
+
+    .analyze-btn {
+      width: 100%;
+      height: 51px;
+      margin-top: 11px;
+      border-radius: 14px;
+      background:
+        linear-gradient(
+          135deg,
+          #0878ff,
+          #16a9ff
+        );
+      font-weight: 900;
+      box-shadow:
+        0 10px 26px rgba(0, 113, 255, .23);
+    }
+
+    .analyze-btn:active {
+      transform: scale(.97);
+    }
+
+    .analyze-btn.loading {
+      opacity: .65;
+      pointer-events: none;
+    }
+
+    /* RESULT */
+
+    .result {
+      display: none;
+      margin-top: 13px;
+      padding: 15px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.035);
+      animation: resultIn .35s ease;
+    }
+
+    .result.show {
+      display: block;
+    }
+
+    @keyframes resultIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px) scale(.97);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .result-main {
+      text-align: center;
+      padding: 9px 0 14px;
+    }
+
+    .prediction {
+      font-size: 36px;
+      font-weight: 1000;
+      letter-spacing: 1px;
+    }
+
+    .prediction.big {
+      color: var(--gold);
+      text-shadow: 0 0 25px rgba(255, 216, 77, .55);
+    }
+
+    .prediction.small {
+      color: #51caff;
+      text-shadow: 0 0 25px rgba(34, 180, 255, .45);
+    }
+
+    .prediction.none {
+      color: #a8b7ca;
+    }
+
+    .percent {
+      margin-top: 2px;
+      font-size: 15px;
+      font-weight: 900;
+      color: #d9e8fb;
+    }
+
+    .result-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 7px;
+    }
+
+    .stat {
+      padding: 10px 7px;
+      text-align: center;
+      border-radius: 12px;
+      background: rgba(255,255,255,.035);
+    }
+
+    .stat-label {
+      color: #7188a6;
+      font-size: 9px;
+      font-weight: 800;
+    }
+
+    .stat-value {
+      margin-top: 4px;
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    /* DIGITS */
+
+    .digits {
+      margin-top: 13px;
+    }
+
+    .digits-title {
+      margin-bottom: 8px;
+      color: #91a6c2;
+      font-size: 10px;
+      font-weight: 900;
+      letter-spacing: .8px;
+      text-transform: uppercase;
+    }
+
+    .digit-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+    }
+
+    .digit {
+      padding: 7px 3px;
+      border-radius: 9px;
+      background: rgba(255,255,255,.035);
+      text-align: center;
+    }
+
+    .digit-number {
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .digit-percent {
+      margin-top: 2px;
+      color: #75baff;
+      font-size: 8px;
+      font-weight: 800;
+    }
+
+    .digit-count {
+      color: #617995;
+      font-size: 8px;
+    }
+
+    /* RESPONSIVE */
+
+    @media (min-width: 700px) {
+      .app {
+        padding-top: 35px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- LOADER -->
+  <div class="loader" id="loader">
+    <div class="loader-box">
+      <div class="spinner"></div>
+      <div class="loader-text">
+        Xeen AI Initializing...
+      </div>
+    </div>
+  </div>
+
+  <main class="app">
+
+    <!-- HEADER -->
+    <header class="header">
+      <div class="brand">
+        <div class="brand-icon">✦</div>
+
+        <div class="brand-text">
+          <div class="brand-title">
+            Xeen Ai Mini Predictor
+          </div>
+
+          <div class="brand-subtitle">
+            Premium Prediction System
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- USER -->
+    <section class="user-card">
+
+      <div class="user-row">
+
+        <div>
+          <div class="label">
+            User ID
+          </div>
+
+          <div
+            class="user-id"
+            id="userId"
+          >
+            Loading...
+          </div>
+        </div>
+
+        <div class="coin-box">
+          <div class="label">
+            Coin
+          </div>
+
+          <div
+            class="coin"
+            id="coin"
+          >
+            <span class="coin-icon">🪙</span>
+            0
+          </div>
+        </div>
+
+      </div>
+
+      <button
+        class="copy-btn"
+        id="copyBtn"
+      >
+        Copy User ID
+      </button>
+
+    </section>
+
+    <!-- 777 BIG WIN -->
+    <section class="section">
+
+      <div class="section-title">
+        <h2>777 Big Win</h2>
+        <div class="badge">PREMIUM</div>
+      </div>
+
+      <div class="game-card">
+
+        <div class="game-name">
+          777 Big Win
+        </div>
+
+        <div
+          class="modes"
+          id="bigwinModes"
+        >
+          <button
+            class="mode active"
+            data-mode="WINGO"
+          >
+            WINGO
+          </button>
+
+          <button
+            class="mode"
+            data-mode="TRX"
+          >
+            TRX
+          </button>
+        </div>
+
+        <button
+          class="play-btn ripple-btn"
+          id="bigwinPlay"
+        >
+          Play Game
+        </button>
+
+      </div>
+
+    </section>
+
+    <!-- MINI GAME -->
+    <section class="section">
+
+      <div class="section-title">
+        <h2>Mini Game</h2>
+        <div class="badge">AI READY</div>
+      </div>
+
+      <div class="game-card">
+
+        <div class="game-name">
+          Mini Game
+        </div>
+
+        <div
+          class="modes"
+          id="miniModes"
+        >
+          <button
+            class="mode active"
+            data-mode="WINGO"
+          >
+            WINGO
+          </button>
+
+          <button
+            class="mode"
+            data-mode="TRX"
+          >
+            TRX
+          </button>
+        </div>
+
+        <button
+          class="play-btn ripple-btn"
+          id="miniPlay"
+        >
+          Play Game
+        </button>
+
+      </div>
+
+    </section>
+
+    <!-- CONTACT -->
+    <section class="contact">
+
+      <button
+        class="contact-btn ripple-btn"
+        id="adminContact"
+      >
+        Admin ကိုဆက်သွယ်ရန်
+      </button>
+
+      <div class="footer">
+        XEEN AI • PREMIUM SYSTEM
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- DEVELOPER -->
+  <button
+    class="developer"
+    id="developerBtn"
+    aria-label="Developer"
+  >
+    ⌘
+  </button>
+
+  <!-- TOAST -->
+  <div class="toast-wrap">
+    <div
+      class="toast"
+      id="toast"
+    ></div>
+  </div>
+
+  <!-- FULLSCREEN GAME -->
+  <div
+    class="game-view"
+    id="gameView"
+  >
+
+    <iframe
+      class="game-frame"
+      id="gameFrame"
+      title="Game"
+      allow="fullscreen; autoplay"
+    ></iframe>
+
+    <div class="game-top">
+
+      <button
+        class="game-control"
+        id="aiBtn"
+        aria-label="AI Predictor"
+      >
+        ✦
+      </button>
+
+      <button
+        class="game-control"
+        id="gameClose"
+        aria-label="Close"
+      >
+        ×
+      </button>
+
+    </div>
+
+    <!-- AI PANEL -->
+    <div
+      class="ai-panel"
+      id="aiPanel"
+    >
+
+      <div class="ai-head">
+
+        <div class="ai-title">
+          <span class="ai-star">✦</span>
+          AI Predictor
+        </div>
+
+        <button
+          class="ai-close"
+          id="aiClose"
+        >
+          ×
+        </button>
+
+      </div>
+
+      <label
+        class="input-label"
+        for="roundInput"
+      >
+        Period / Round ID — Enter last 2 digits
+      </label>
+
+      <input
+        id="roundInput"
+        class="round-input"
+        type="text"
+        inputmode="numeric"
+        autocomplete="off"
+        maxlength="2"
+        placeholder="32"
+      >
+
+     <button
+        class="analyze-btn ripple-btn"
+        id="analyzeBtn"
+      >
+        ✨ Analyze
+      </button>
+
+      <!-- RESULT -->
+      <div
+        class="result"
+        id="result"
+      >
+
+        <div class="result-main">
+
+          <div
+            class="prediction"
+            id="prediction"
+          >
+            —
+          </div>
+
+          <div
+            class="percent"
+            id="predictionPercent"
+          >
+            0%
+          </div>
+
+        </div>
+
+        <div class="result-grid">
+
+          <div class="stat">
+            <div class="stat-label">
+              Matched
+            </div>
+
+            <div
+              class="stat-value"
+              id="matched"
+            >
+              0
+            </div>
+          </div>
+
+          <div class="stat">
+            <div class="stat-label">
+              BIG
+            </div>
+
+            <div
+              class="stat-value"
+              id="bigCount"
+            >
+              0
+            </div>
+          </div>
+
+          <div class="stat">
+            <div class="stat-label">
+              SMALL
+            </div>
+
+            <div
+              class="stat-value"
+              id="smallCount"
+            >
+              0
+            </div>
+          </div>
+
+          <div class="stat">
+            <div class="stat-label">
+              Coin
+            </div>
+
+            <div
+              class="stat-value"
+              id="resultCoin"
+            >
+              0
+            </div>
+          </div>
+
+          <div class="stat">
+            <div class="stat-label">
+              Game
+            </div>
+
+            <div
+              class="stat-value"
+              id="resultGame"
+            >
+              —
+            </div>
+          </div>
+
+          <div class="stat">
+            <div class="stat-label">
+              Mode
+            </div>
+
+            <div
+              class="stat-value"
+              id="resultMode"
+            >
+              —
+            </div>
+          </div>
+
+        </div>
+
+        <div class="digits">
+
+          <div class="digits-title">
+            Digit Statistics — 0 to 9
+          </div>
+
+          <div
+            class="digit-grid"
+            id="digitGrid"
+          ></div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+<script>
+'use strict';
+
+const state = {
+  session: localStorage.getItem('xeen_session') || '',
+  user: null,
+  config: null,
+  currentGame: 'MINI',
+  currentMode: 'WINGO'
+};
+
+const $ = (id) =>
+  document.getElementById(id);
+
+function showToast(message) {
+  const toast = $('toast');
+
+  toast.textContent = message;
+  toast.classList.add('show');
+
+  clearTimeout(showToast.timer);
+
+  showToast.timer = setTimeout(() => {
+    toast.classList.remove('show');
+  }, 2500);
+}
+
+async function api(url, options = {}) {
+  const headers = {
+    'Content-Type': 'application/json',
+    ...(options.headers || {})
+  };
+
+  if (state.session) {
+    headers.Authorization =
+      `Bearer ${state.session}`;
+  }
+
+  const response = await fetch(
+    url,
+    {
+      ...options,
+      headers
+    }
+  );
+
+  let data = {};
+
+  try {
+    data = await response.json();
+  } catch {
+    data = {
+      ok: false,
+      error: 'Invalid server response'
+    };
+  }
+
+  if (!response.ok) {
+    const error =
+      new Error(
+        data.error ||
+        `HTTP ${response.status}`
+      );
+
+    error.status =
+      response.status;
+
+    error.data = data;
+
+    throw error;
+  }
+
+  return data;
+}
+
+async function createSession() {
+  const data = await api(
+    '/api/session',
+    {
+      method: 'POST'
+    }
+  );
+
+  state.session =
+    data.session;
+
+  localStorage.setItem(
+    'xeen_session',
+    state.session
+  );
+
+  state.user =
+    data.user;
+}
+
+async function loadMe() {
+  const data =
+    await api('/api/me');
+
+  state.user =
+    data.user;
+}
+
+async function loadConfig() {
+  const data =
+    await api('/api/config');
+
+  state.config =
+    data;
+}
+
+function renderUser() {
+  if (!state.user) return;
+
+  $('userId').textContent =
+    state.user.user_id;
+
+  $('coin').innerHTML =
+    `<span class="coin-icon">🪙</span> ${Number(
+      state.user.coin
+    )}`;
+}
+
+function selectMode(containerId, mode) {
+  const container =
+    $(containerId);
+
+  if (!container) return;
+
+  container
+    .querySelectorAll('.mode')
+    .forEach(button => {
+      button.classList.toggle(
+        'active',
+        button.dataset.mode === mode
+      );
+    });
+}
+
+function getSelectedMode(containerId) {
+  const button =
+    $(containerId)
+      .querySelector('.mode.active');
+
+  return button
+    ? button.dataset.mode
+    : 'WINGO';
+}
+
+function openTelegram(url) {
+  if (!url) {
+    showToast(
+      'Telegram link မသတ်မှတ်ရသေးပါ'
+    );
+
+    return;
+  }
+
+  window.open(
+    url,
+    '_blank',
+    'noopener,noreferrer'
+  );
+}
+
+function openGame(game, mode) {
+  if (!state.config) {
+    showToast(
+      'Configuration loading...'
+    );
+
+    return;
+  }
+
+  let url = '';
+
+  if (game === '777') {
+    url =
+      state.config.games?.['777']?.[mode] ||
+      '';
+  }
+
+  if (game === 'MINI') {
+    url =
+      state.config.games?.MINI?.[mode] ||
+      '';
+  }
+
+  if (!url) {
+    showToast(
+      `${game} ${mode} URL မရှိပါ`
+    );
+
+    return;
+  }
+
+  state.currentGame =
+    game;
+
+  state.currentMode =
+    mode;
+
+  $('gameFrame').src =
+    url;
+
+  $('gameView')
+    .classList.add('open');
+
+  document.body.style.overflow =
+    'hidden';
+
+  closeAiPanel();
+}
+
+function closeGame() {
+  $('gameFrame').src = '';
+  $('gameView')
+    .classList.remove('open');
+
+  document.body.style.overflow =
+    '';
+  closeAiPanel();
+}
+
+function openAiPanel() {
+  $('aiPanel')
+    .classList.add('open');
+
+  setTimeout(() => {
+    $('roundInput').focus();
+  }, 250);
+}
+
+function closeAiPanel() {
+  $('aiPanel')
+    .classList.remove('open');
+}
+
+function renderDigits(digits) {
+  const grid =
+    $('digitGrid');
+
+  grid.innerHTML = '';
+
+  if (!Array.isArray(digits)) {
+    return;
+  }
+
+  digits.forEach(item => {
+    const div =
+      document.createElement('div');
+
+    div.className =
+      'digit';
+
+    div.innerHTML = `
+      <div class="digit-number">
+        ${item.digit}
+      </div>
+
+      <div class="digit-percent">
+        ${Number(item.percentage || 0).toFixed(2)}%
+      </div>
+
+      <div class="digit-count">
+        ${Number(item.count || 0)} times
+      </div>
+    `;
+
+    grid.appendChild(div);
+  });
+}
+
+function renderResult(data) {
+  const result =
+    data.result || {};
+
+  const prediction =
+    String(
+      result.prediction ||
+      'NO DATA'
+    ).toUpperCase();
+
+  const predictionElement =
+    $('prediction');
+
+  predictionElement.textContent =
+    prediction;
+
+  predictionElement.className =
+    'prediction';
+
+  if (prediction === 'BIG') {
+    predictionElement.classList.add(
+      'big'
+    );
+  } else if (prediction === 'SMALL') {
+    predictionElement.classList.add(
+      'small'
+    );
+  } else {
+    predictionElement.classList.add(
+      'none'
+    );
+  }
+
+  $('predictionPercent')
+    .textContent =
+    `${Number(
+      result.percentage || 0
+    ).toFixed(2)}%`;
+
+  $('matched').textContent =
+    Number(
+      result.matched || 0
+    );
+
+  $('bigCount').textContent =
+    Number(
+      result.big || 0
+    );
+
+  $('smallCount').textContent =
+    Number(
+      result.small || 0
+    );
+
+  $('resultCoin').textContent =
+    Number(
+      data.user?.coin ??
+      state.user?.coin ??
+      0
+    );
+
+  $('resultGame').textContent =
+    data.game || '—';
+
+  $('resultMode').textContent =
+    data.mode || '—';
+
+  renderDigits(
+    result.digits
+  );
+
+  $('result')
+    .classList.remove('show');
+
+  requestAnimationFrame(() => {
+    $('result')
+      .classList.add('show');
+  });
+}
+
+async function analyze() {
+  const input =
+    $('roundInput')
+      .value
+      .trim();
+
+  if (!/^\d{2}$/.test(input)) {
+    showToast(
+      'နောက်ဆုံး 2 လုံးကို ထည့်ပါ။ ဥပမာ 32'
+    );
+
+    $('roundInput').focus();
+
+    return;
+  }
+
+  const button =
+    $('analyzeBtn');
+
+  button.classList.add(
+    'loading'
+  );
+
+  button.textContent =
+    '⏳ Analyzing...';
+
+  try {
+    const data =
+      await api(
+        '/api/analyze',
+        {
+          method: 'POST',
+          body: JSON.stringify({
+            game:
+              state.currentGame,
+            mode:
+              state.currentMode,
+            input
+          })
+        }
+      );
+
+    state.user =
+      data.user;
+
+    renderUser();
+    renderResult(data);
+
+    showToast(
+      '✅ Analysis Complete'
+    );
+
+  } catch (error) {
+    console.error(error);
+
+    if (
+      error.data?.code ===
+      'INSUFFICIENT_COIN'
+    ) {
+      showToast(
+        '❌ Coin မလုံလောက်ပါ'
+      );
+    } else if (
+      error.status === 401
+    ) {
+      localStorage.removeItem(
+        'xeen_session'
+      );
+
+      state.session = '';
+
+      showToast(
+        'Session expired. Reloading...'
+      );
+
+      setTimeout(() => {
+        location.reload();
+      }, 900);
+    } else {
+      showToast(
+        `❌ ${error.message}`
+      );
+    }
+  } finally {
+    button.classList.remove(
+      'loading'
+    );
+
+    button.textContent =
+      '✨ Analyze';
+  }
+}
+
+/* =========================
+   RIPPLE
+========================= */
+
+document
+  .querySelectorAll('.ripple-btn')
+  .forEach(button => {
+
+    button.addEventListener(
+      'click',
+      function(event) {
+
+        const rect =
+          this.getBoundingClientRect();
+
+        const circle =
+          document.createElement(
+            'span'
+          );
+
+        const size =
+          Math.max(
+            rect.width,
+            rect.height
+          );
+
+        circle.className =
+          'ripple';
+
+        circle.style.width =
+          `${size}px`;
+
+        circle.style.height =
+          `${size}px`;
+
+        circle.style.left =
+          `${event.clientX - rect.left - size / 2}px`;
+
+        circle.style.top =
+          `${event.clientY - rect.top - size / 2}px`;
+
+        this.appendChild(circle);
+
+        setTimeout(() => {
+          circle.remove();
+        }, 600);
+      }
+    );
+  });
+
+/* =========================
+   MODE BUTTONS
+========================= */
+
+document
+  .querySelectorAll(
+    '#bigwinModes .mode'
+  )
+  .forEach(button => {
+
+    button.addEventListener(
+      'click',
+      () => {
+        selectMode(
+          'bigwinModes',
+          button.dataset.mode
+        );
+      }
+    );
+  });
+
+document
+  .querySelectorAll(
+    '#miniModes .mode'
+  )
+  .forEach(button => {
+
+    button.addEventListener(
+      'click',
+      () => {
+        selectMode(
+          'miniModes',
+          button.dataset.mode
+        );
+      }
+    );
+  });
+
+/* =========================
+   PLAY BUTTONS
+========================= */
+
+$('bigwinPlay')
+  .addEventListener(
+    'click',
+    () => {
+
+      const mode =
+        getSelectedMode(
+          'bigwinModes'
+        );
+
+      openGame(
+        '777',
+        mode
+      );
+    }
+  );
+
+$('miniPlay')
+  .addEventListener(
+    'click',
+    () => {
+
+      const mode =
+        getSelectedMode(
+          'miniModes'
+        );
+
+      openGame(
+        'MINI',
+        mode
+      );
+    }
+  );
+
+/* =========================
+   GAME CONTROLS
+========================= */
+
+$('gameClose')
+  .addEventListener(
+    'click',
+    closeGame
+  );
+
+$('aiBtn')
+  .addEventListener(
+    'click',
+    () => {
+
+      if (
+        $('aiPanel')
+          .classList.contains('open')
+      ) {
+        closeAiPanel();
+      } else {
+        openAiPanel();
+      }
+    }
+  );
+
+$('aiClose')
+  .addEventListener(
+    'click',
+    closeAiPanel
+  );
+
+$('gameView')
+  .addEventListener(
+    'click',
+    event => {
+
+      if (
+        event.target ===
+        $('gameView')
+      ) {
+        closeAiPanel();
+      }
+    }
+  );
+
+/* =========================
+   ANALYZE
+========================= */
+
+$('analyzeBtn')
+  .addEventListener(
+    'click',
+    analyze
+  );
+
+$('roundInput')
+  .addEventListener(
+    'input',
+    event => {
+
+      event.target.value =
+        event.target.value
+          .replace(/\D/g, '')
+          .slice(0, 2);
+    }
+  );
+
+$('roundInput')
+  .addEventListener(
+    'keydown',
+    event => {
+
+      if (
+        event.key === 'Enter'
+      ) {
+        analyze();
+      }
+
+      if (
+        event.key === 'Escape'
+      ) {
+        closeAiPanel();
+      }
+    }
+  );
+
+/* =========================
+   ESC
+========================= */
+
+document.addEventListener(
+  'keydown',
+  event => {
+
+    if (
+      event.key === 'Escape'
+    ) {
+
+      if (
+        $('aiPanel')
+          .classList.contains('open')
+      ) {
+        closeAiPanel();
+      } else if (
+        $('gameView')
+          .classList.contains('open')
+      ) {
+        closeGame();
+      }
+    }
+  }
+);
+
+/* =========================
+   COPY
+========================= */
+
+$('copyBtn')
+  .addEventListener(
+    'click',
+    async () => {
+
+      if (!state.user) return;
+
+      try {
+        await navigator.clipboard.writeText(
+          state.user.user_id
+        );
+
+        showToast(
+          '✅ User ID copied'
+        );
+      } catch {
+        showToast(
+          'Copy မလုပ်နိုင်ပါ'
+        );
+      }
+    }
+  );
+
+/* =========================
+   CONTACT
+========================= */
+
+$('adminContact')
+  .addEventListener(
+    'click',
+    () => {
+
+      openTelegram(
+        state.config?.contacts?.admin
+      );
+    }
+  );
+
+$('developerBtn')
+  .addEventListener(
+    'click',
+    () => {
+
+      openTelegram(
+        state.config?.contacts?.developer
+      );
+    }
+  );
+
+/* =========================
+   INIT
+========================= */
+
+async function init() {
+
+  try {
+
+    if (state.session) {
+      try {
+        await loadMe();
+      } catch {
+        localStorage.removeItem(
+          'xeen_session'
+        );
+
+        state.session = '';
+
+        await createSession();
+      }
+    } else {
+      await createSession();
+    }
+
+    await loadConfig();
+
+    renderUser();
+
+    $('loader')
+      .classList.add('hidden');
+
+  } catch (error) {
+
+    console.error(
+      'Initialization error:',
+      error
+    );
+
+    $('loader').innerHTML = `
+      <div class="loader-box">
+        <div style="
+          font-size:38px;
+          margin-bottom:10px;
+        ">
+          ⚠️
+        </div>
+
+        <div style="
+          font-weight:900;
+          font-size:15px;
+        ">
+          Connection Error
+        </div>
+
+        <div style="
+          color:#8fa5c5;
+          font-size:11px;
+          margin-top:7px;
+        ">
+          Server ကို run ထားကြောင်း စစ်ပါ။
+        </div>
+
+        <button
+          onclick="location.reload()"
+          style="
+            margin-top:15px;
+            padding:10px 16px;
+            border-radius:10px;
+            background:#0878ff;
+            color:white;
+            font-weight:900;
+          "
+        >
+          Retry
+        </button>
+      </div>
+    `;
+  }
+}
+
+init();
+</script>
+
+</body>
+</html>

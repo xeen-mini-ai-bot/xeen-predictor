@@ -1,0 +1,18 @@
+{
+  "name": "xeen-ai-mini-predictor",
+  "version": "2.0.0",
+  "description": "Xeen AI Mini Predictor",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "init-db": "node database/init.js"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "node-telegram-bot-api": "^0.66.0"
+  }
+}

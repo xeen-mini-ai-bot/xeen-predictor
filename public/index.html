@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Xeen AI Predictor</title>
+<meta name="theme-color" content="#02050b">
+
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#02050b;
+  --panel:#071326;
+  --panel2:#091a31;
+  --blue:#1788ff;
+  --blue2:#42b8ff;
+  --cyan:#00eaff;
+  --green:#15ed8b;
+  --green2:#00b96b;
+  --gold:#ffd52f;
+  --white:#f8fbff;
+  --muted:#7d91af;
+  --line:rgba(73,151,255,.16);
+}
+html,body{margin:0;padding:0;width:100%;min-height:100%;background:#02050b;color:var(--white);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+body{
+  overflow-x:hidden;
+  background:
+    radial-gradient(circle at 50% -8%,rgba(0,113,255,.18),transparent 30%),
+    radial-gradient(circle at 8% 58%,rgba(0,255,160,.055),transparent 25%),
+    radial-gradient(circle at 96% 70%,rgba(0,150,255,.065),transparent 27%),
+    #02050b;
+}
+body:before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;
+  background:linear-gradient(rgba(255,255,255,.012) 1px,transparent 1px);
+  background-size:100% 44px;
+  mask-image:linear-gradient(to bottom,#000,transparent 90%);
+}
+button,input{font:inherit}button{border:0;outline:0;color:inherit;cursor:pointer}
+.app{width:100%;max-width:470px;margin:auto;padding:18px 13px calc(74px + env(safe-area-inset-bottom))}
+.header{text-align:center;padding:8px 0 17px}
+.brand{display:inline-flex;flex-direction:column;align-items:center}
+.brand-title{
+  font-size:30px;line-height:1;font-weight:1000;letter-spacing:-1.4px;
+  background:linear-gradient(90deg,#1687ff,#6b64ff,#27b9ff);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  text-shadow:0 0 30px rgba(35,126,255,.18)
+}
+.brand-subtitle{margin-top:8px;color:#8092ad;font-size:9px;font-weight:900;letter-spacing:3px}
+.card{position:relative;overflow:hidden;border:1px solid var(--line);background:linear-gradient(145deg,rgba(9,24,46,.94),rgba(3,10,21,.96));box-shadow:inset 0 1px rgba(255,255,255,.035),0 18px 45px rgba(0,0,0,.27)}
+.user-card{padding:17px;border-radius:25px;box-shadow:inset 0 1px rgba(255,255,255,.035),0 18px 45px rgba(0,0,0,.3),0 0 35px rgba(0,120,255,.07)}
+.user-card:after{
+  content:"";position:absolute;width:180px;height:180px;right:-90px;top:-125px;border-radius:50%;
+  background:#008cff;filter:blur(65px);opacity:.18;pointer-events:none
+}
+.user-row{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;gap:15px}
+.label{color:#8295b2;font-size:9px;font-weight:850;letter-spacing:1.5px;text-transform:uppercase}
+.user-id{margin-top:4px;font-size:25px;font-weight:1000;letter-spacing:.8px}
+.coin{margin-top:5px;font-size:16px;font-weight:950}
+.coin-icon{filter:drop-shadow(0 0 8px rgba(255,214,47,.6))}
+.copy-btn{
+  position:absolute;right:17px;top:50%;transform:translateY(-18%);
+  padding:12px 17px;border-radius:17px;color:#c5d4e9;background:linear-gradient(145deg,#142642,#0c1a30);
+  border:1px solid rgba(100,160,235,.08);font-size:11px;font-weight:950;
+  box-shadow:0 8px 25px rgba(0,0,0,.22)
+}
+.copy-btn:active{transform:translateY(-18%) scale(.96)}
+.status{
+  margin-top:18px;min-height:42px;padding:0 14px;border-radius:21px;display:flex;align-items:center;justify-content:center;
+  color:#b8a95e;background:rgba(10,15,20,.7);border:1px solid rgba(255,210,55,.14);
+  font-size:10px;font-weight:850;letter-spacing:.1px;box-shadow:0 0 22px rgba(255,210,55,.025)
+}
+
+.section{margin-top:19px}
+.section-title{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;padding:0 2px}
+.section-title h2{margin:0;font-size:17px;font-weight:1000;letter-spacing:-.3px}
+.badge{padding:5px 8px;border-radius:8px;color:#83caff;background:rgba(20,130,255,.06);border:1px solid rgba(50,155,255,.13);font-size:7px;font-weight:950;letter-spacing:.7px}
+.game-card{position:relative;overflow:hidden;padding:16px 15px 15px;border-radius:27px}
+.game-card:after{content:"";position:absolute;width:180px;height:180px;right:-110px;bottom:-115px;border-radius:50%;filter:blur(60px);pointer-events:none}
+.game-card.green{border-color:rgba(0,255,145,.08);box-shadow:inset 0 1px rgba(255,255,255,.035),0 18px 45px rgba(0,0,0,.28),0 0 34px rgba(0,255,145,.05)}
+.game-card.green:after{background:#00ff91;opacity:.15}
+.game-card.blue{border-color:rgba(35,145,255,.14);box-shadow:inset 0 1px rgba(255,255,255,.035),0 18px 45px rgba(0,0,0,.28),0 0 34px rgba(0,130,255,.07)}
+.game-card.blue:after{background:#008cff;opacity:.16}
+.game-name{position:relative;z-index:1;font-size:16px;font-weight:1000;margin-bottom:4px}
+.game-name.green-text{color:#20f29a}.game-name.blue-text{color:#168cff}
+.game-sub{position:relative;z-index:1;color:#788ca9;font-size:10px;margin-bottom:13px}
+.modes{position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.mode{min-height:45px;border-radius:15px;color:#7185a2;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.055);font-size:11px;font-weight:950;transition:.18s ease}
+.mode:active{transform:scale(.97)}
+.mode.active{color:#fff;background:rgba(18,67,116,.55);border-color:#168cff;box-shadow:0 0 20px rgba(0,140,255,.2),inset 0 1px rgba(255,255,255,.08)}
+.play-btn{position:relative;overflow:hidden;width:100%;margin-top:9px;min-height:46px;border-radius:15px;color:#fff;font-size:12px;font-weight:1000;transition:.16s ease}
+.play-btn:active{transform:scale(.98)}
+.big-play{background:linear-gradient(135deg,#00ad68,#20ef91);box-shadow:0 0 25px rgba(0,255,145,.18),0 12px 30px rgba(0,160,100,.16)}
+.mini-play{background:linear-gradient(135deg,#176dff,#2ca7ff);box-shadow:0 0 25px rgba(0,145,255,.18),0 12px 30px rgba(0,120,255,.16)}
+.contact{margin-top:19px;text-align:center}.contact-btn{width:100%;min-height:45px;border-radius:14px;color:#91afd2;background:rgba(15,65,120,.08);border:1px solid rgba(60,145,255,.13);font-size:10px;font-weight:950}
+.footer{margin-top:9px;color:#465d79;font-size:7px;font-weight:800;letter-spacing:1.5px}
+.developer{position:fixed;z-index:25;right:14px;bottom:calc(14px + env(safe-area-inset-bottom));width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(145deg,#0c68ff,#182b69);border:1px solid rgba(50,160,255,.25);box-shadow:0 0 25px rgba(0,135,255,.28);font-size:22px}
+.toast-wrap{position:fixed;z-index:300;left:50%;bottom:75px;width:min(90%,360px);transform:translateX(-50%);pointer-events:none}.toast{opacity:0;transform:translateY(12px) scale(.97);padding:11px 13px;border-radius:12px;background:rgba(5,13,25,.97);border:1px solid rgba(255,255,255,.08);box-shadow:0 0 28px rgba(0,120,255,.14);font-size:10px;font-weight:850;text-align:center;transition:.22s}.toast.show{opacity:1;transform:none}
+.loader{position:fixed;z-index:500;inset:0;display:grid;place-items:center;background:radial-gradient(circle at center,rgba(0,120,255,.13),transparent 35%),#02050b;transition:.3s}.loader.hidden{opacity:0;pointer-events:none}.loader-box{text-align:center}.spinner{width:40px;height:40px;border:2px solid rgba(255,255,255,.07);border-top-color:#00eaff;border-right-color:#238aff;border-radius:50%;animation:spin .7s linear infinite;box-shadow:0 0 25px rgba(0,210,255,.25)}@keyframes spin{to{transform:rotate(360deg)}}
+
+/* GAME VIEW */
+.game-view{position:fixed;z-index:100;inset:0;display:none;background:#000}.game-view.open{display:block}
+.game-frame{width:100%;height:100%;border:0;display:block;background:#000}
+.game-top{position:absolute;z-index:20;top:13px;right:13px;display:flex;gap:8px}
+.game-control{width:44px;height:44px;border-radius:14px;background:rgba(5,14,28,.82);border:1px solid rgba(80,160,255,.2);backdrop-filter:blur(14px);box-shadow:0 0 20px rgba(0,100,255,.12);font-size:20px}
+.game-control:active{transform:scale(.93)}
+
+/* AI PANEL — screenshot style */
+.ai-panel{
+  position:absolute;z-index:30;left:50%;bottom:12px;width:min(88%,440px);max-height:86vh;overflow:auto;
+  padding:18px 17px 17px;border-radius:27px;border:1px solid rgba(35,143,255,.42);
+  background:linear-gradient(150deg,rgba(7,23,46,.985),rgba(3,11,24,.99));
+  box-shadow:0 0 18px rgba(0,125,255,.12),0 0 55px rgba(0,100,255,.16),0 25px 70px rgba(0,0,0,.6);
+  transform:translate(-50%,125%);transition:transform .34s cubic-bezier(.2,.85,.2,1)
+}
+.ai-panel.open{transform:translate(-50%,0)}
+.ai-panel:before{content:"";position:absolute;inset:0;border-radius:27px;pointer-events:none;background:linear-gradient(135deg,rgba(50,160,255,.05),transparent 35%,rgba(0,80,255,.03))}
+.ai-head{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.ai-title{display:flex;align-items:center;gap:8px;font-size:19px;font-weight:1000;letter-spacing:-.4px}.ai-star{color:#ffd84d;text-shadow:0 0 14px rgba(255,216,77,.65)}
+.ai-close{width:39px;height:39px;border-radius:50%;background:rgba(7,24,48,.65);border:1px solid rgba(70,150,255,.25);font-size:26px;line-height:1;color:#eaf4ff}
+.ai-label{display:block;margin:0 0 7px;color:#8195b1;font-size:9px;font-weight:950;letter-spacing:1.1px;text-transform:uppercase}
+.ai-game-grid,.ai-mode-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ai-choice{height:43px;border-radius:14px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.06);color:#7085a3;font-size:10px;font-weight:1000;transition:.18s ease}
+.ai-choice.active{color:#fff;border-color:#168cff;background:rgba(13,65,115,.55);box-shadow:0 0 20px rgba(0,140,255,.18),inset 0 1px rgba(255,255,255,.08)}
+.ai-choice.big-active{border-color:#1bdc8c;box-shadow:0 0 20px rgba(0,255,145,.12)}
+.ai-mode-grid{margin-top:8px;margin-bottom:14px}
+.round-row{display:grid;grid-template-columns:1fr 72px;gap:9px}
+.round-input{width:100%;height:52px;padding:0 16px;border-radius:15px;outline:0;color:#fff;background:#020a18;border:1px solid rgba(45,135,255,.35);font-size:24px;font-weight:1000;letter-spacing:7px;text-align:center;box-shadow:inset 0 0 25px rgba(0,75,180,.07)}
+.round-input:focus{border-color:#168cff;box-shadow:0 0 0 3px rgba(20,130,255,.07),0 0 25px rgba(0,120,255,.13)}
+.search-btn{height:52px;border-radius:15px;background:linear-gradient(135deg,#2d72ff,#4b4eff);box-shadow:0 0 25px rgba(55,85,255,.25);font-size:23px}
+.search-btn:active{transform:scale(.96)}
+.result{display:none;margin-top:13px}.result.show{display:block}
+.prediction-divider{height:1px;background:linear-gradient(90deg,transparent,rgba(80,160,255,.35),transparent);margin:2px 0 11px}
+.bs-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;border-radius:18px;overflow:hidden;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.03)}
+.bs-card{padding:12px 8px 11px;text-align:center}.bs-card.big{border-right:1px solid rgba(255,255,255,.035)}
+.bs-name{color:#8998aa;font-size:9px;font-weight:900;letter-spacing:.5px}.bs-percent{margin-top:1px;font-size:31px;line-height:1;font-weight:1000}
+.bs-card.big .bs-percent{color:#ffd429;text-shadow:0 0 18px rgba(255,212,41,.4)}.bs-card.small .bs-percent{color:#178dff;text-shadow:0 0 18px rgba(23,141,255,.4)}
+.matched-line{text-align:center;margin-top:9px;color:#7f8da1;font-size:9px}
+.stats-title{margin-top:13px;margin-bottom:7px;color:#168cff;font-size:9px;font-weight:1000;letter-spacing:.6px;text-transform:uppercase}
+.digit-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.digit{padding:8px 2px;border-radius:11px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.025);text-align:center}
+.digit-number{font-size:14px;font-weight:1000}.digit-percent{margin-top:1px;color:#7e92ae;font-size:8px}.digit-count{display:none}
+.analyze-btn{width:100%;height:49px;margin-top:14px;border-radius:15px;background:linear-gradient(135deg,#276cff,#6b45ff);box-shadow:0 0 28px rgba(72,76,255,.25);font-size:11px;font-weight:1000}.analyze-btn.loading{opacity:.65;pointer-events:none}
+.hidden-stat{display:none}
+@media(max-height:720px){.app{padding-top:10px}.brand-title{font-size:27px}.header{padding-bottom:12px}.status{margin-top:13px}.section{margin-top:14px}.game-card{padding:13px}.user-card{padding:14px}.ai-panel{max-height:89vh;padding:14px}}
+</style>
+</head>
+
+<body>
+
+<div class="loader" id="loader">
+  <div class="loader-box">
+    <div class="spinner"></div>
+    <div style="margin-top:11px;color:#7891b0;font-size:9px;font-weight:850;letter-spacing:1px">XEEN AI INITIALIZING...</div>
+  </div>
+</div>
+
+<main class="app">
+
+<header class="header">
+  <div class="brand">
+    <div class="brand-title">Xeen AI Predictor</div>
+    <div class="brand-subtitle">PREMIUM GAME ANALYTICS</div>
+  </div>
+</header>
+
+<section class="user-card card">
+  <div class="user-row">
+    <div>
+      <div class="label">User ID</div>
+      <div class="user-id" id="userId">Loading...</div>
+      <div class="coin" id="coin"><span class="coin-icon">🪙</span> 0 Coin</div>
+    </div>
+  </div>
+  <button class="copy-btn" id="copyBtn">COPY</button>
+</section>
+
+<div class="status">🚨 &nbsp;System Ready · Historical Analytics</div>
+
+<section class="section">
+  <div class="game-card green card">
+    <div class="game-name green-text">● 777 BIGWIN</div>
+    <div class="game-sub">Premium 777 Game</div>
+    <div class="modes" id="bigwinModes">
+      <button class="mode active" data-mode="WINGO">WINGO</button>
+      <button class="mode" data-mode="TRX">TRX</button>
+    </div>
+    <button class="play-btn big-play ripple-btn" id="bigwinPlay">🎮 &nbsp; PLAY GAME</button>
+  </div>
+</section>
+
+<section class="section">
+  <div class="game-card blue card">
+    <div class="game-name blue-text">● MINI GAME</div>
+    <div class="game-sub">Fast Mini Game</div>
+    <div class="modes" id="miniModes">
+      <button class="mode active" data-mode="WINGO">WINGO</button>
+      <button class="mode" data-mode="TRX">TRX</button>
+    </div>
+    <button class="play-btn mini-play ripple-btn" id="miniPlay">🎮 &nbsp; PLAY GAME</button>
+  </div>
+</section>
+
+<section class="contact">
+  <button class="contact-btn ripple-btn" id="adminContact">💬 &nbsp; Admin ကိုဆက်သွယ်ရန်</button>
+  <div class="footer">XEEN AI • PREMIUM SYSTEM</div>
+</section>
+
+</main>
+
+<button class="developer" id="developerBtn" aria-label="Developer">⚡</button>
+
+<div class="toast-wrap"><div class="toast" id="toast"></div></div>
+
+<div class="game-view" id="gameView">
+  <iframe class="game-frame" id="gameFrame" title="Game" allow="fullscreen; autoplay"></iframe>
+
+  <div class="game-top">
+    <button class="game-control" id="aiBtn" aria-label="AI Predictor">✦</button>
+    <button class="game-control" id="gameClose" aria-label="Close">×</button>
+  </div>
+
+  <div class="ai-panel" id="aiPanel">
+
+    <div class="ai-head">
+      <div class="ai-title"><span class="ai-star">✨</span> AI Predictor</div>
+      <button class="ai-close" id="aiClose">×</button>
+    </div>
+
+    <label class="ai-label">Select Game</label>
+    <div class="ai-game-grid" id="aiGames">
+      <button class="ai-choice active" data-game="777">777 BIGWIN</button>
+      <button class="ai-choice" data-game="MINI">MINI GAME</button>
+    </div>
+
+    <label class="ai-label" style="margin-top:13px">Select Data</label>
+    <div class="ai-mode-grid" id="aiModes">
+      <button class="ai-choice active" data-mode="WINGO">WINGO</button>
+      <button class="ai-choice" data-mode="TRX">TRX</button>
+    </div>
+
+    <label class="ai-label">Enter 2 Digit Number</label>
+    <div class="round-row">
+      <input id="roundInput" class="round-input" type="text" inputmode="numeric" autocomplete="off" maxlength="2" placeholder="26">
+      <button class="search-btn ripple-btn" id="analyzeBtn" aria-label="Analyze">🔎</button>
+    </div>
+
+    <div class="result" id="result">
+      <div class="prediction-divider"></div>
+
+      <div class="bs-grid">
+        <div class="bs-card big">
+          <div class="bs-name">BIG</div>
+          <div class="bs-percent" id="bigPercent">0%</div>
+        </div>
+        <div class="bs-card small">
+          <div class="bs-name">SMALL</div>
+          <div class="bs-percent" id="smallPercent">0%</div>
+        </div>
+      </div>
+
+      <div class="matched-line">Matched: <span id="matched">0</span></div>
+
+      <div class="stats-title">NUMBER STATISTICS</div>
+      <div class="digit-grid" id="digitGrid"></div>
+
+      <div class="result-grid hidden-stat">
+        <span id="bigCount">0</span><span id="smallCount">0</span>
+        <span id="resultCoin">0</span><span id="resultGame">—</span><span id="resultMode">—</span>
+      </div>
+
+      <button class="analyze-btn ripple-btn" id="analyzeAgain">✨ AI PREDICTOR</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+'use strict';
+
+const state={
+  session:localStorage.getItem('xeen_session')||'',
+  user:null,
+  config:null,
+  currentGame:'MINI',
+  currentMode:'WINGO',
+  aiGame:'777',
+  aiMode:'WINGO'
+};
+
+const $=id=>document.getElementById(id);
+
+function showToast(message){
+  const t=$('toast');
+  t.textContent=message;
+  t.classList.add('show');
+  clearTimeout(showToast.timer);
+  showToast.timer=setTimeout(()=>t.classList.remove('show'),2400);
+}
+
+async function api(url,options={}){
+  const headers={'Content-Type':'application/json',...(options.headers||{})};
+  if(state.session) headers.Authorization=`Bearer ${state.session}`;
+  const response=await fetch(url,{...options,headers});
+  let data={};
+  try{data=await response.json()}catch{data={ok:false,error:'Invalid server response'}};
+  if(!response.ok){
+    const e=new Error(data.error||`HTTP ${response.status}`);
+    e.status=response.status;e.data=data;throw e;
+  }
+  return data;
+}
+
+async function createSession(){
+  const data=await api('/api/session',{method:'POST'});
+  state.session=data.session;
+  localStorage.setItem('xeen_session',state.session);
+  state.user=data.user;
+}
+async function loadMe(){state.user=(await api('/api/me')).user}
+async function loadConfig(){state.config=await api('/api/config')}
+
+function renderUser(){
+  if(!state.user)return;
+  $('userId').textContent=state.user.user_id;
+  $('coin').innerHTML=`<span class="coin-icon">🪙</span> ${Number(state.user.coin)} Coin`;
+}
+
+function selectMode(containerId,mode){
+  $(containerId).querySelectorAll('.mode').forEach(b=>b.classList.toggle('active',b.dataset.mode===mode));
+}
+function getSelectedMode(containerId){
+  return $(containerId).querySelector('.mode.active')?.dataset.mode||'WINGO';
+}
+
+function selectAiGame(game){
+  state.aiGame=game;
+  $('aiGames').querySelectorAll('.ai-choice').forEach(b=>b.classList.toggle('active',b.dataset.game===game));
+  if(game==='777'){
+    $('aiGames').querySelector('[data-game="777"]').classList.add('big-active');
+    $('aiGames').querySelector('[data-game="MINI"]').classList.remove('big-active');
+  }else{
+    $('aiGames').querySelector('[data-game="777"]').classList.remove('big-active');
+    $('aiGames').querySelector('[data-game="MINI"]').classList.remove('big-active');
+  }
+}
+function selectAiMode(mode){
+  state.aiMode=mode;
+  $('aiModes').querySelectorAll('.ai-choice').forEach(b=>b.classList.toggle('active',b.dataset.mode===mode));
+}
+
+function openTelegram(url){
+  if(!url){showToast('Telegram link မသတ်မှတ်ရသေးပါ');return}
+  window.open(url,'_blank','noopener,noreferrer');
+}
+
+function openGame(game,mode){
+  if(!state.config){showToast('Configuration loading...');return}
+  const url=game==='777'
+    ?state.config.games?.['777']?.[mode]||''
+    :state.config.games?.MINI?.[mode]||'';
+  if(!url){showToast(`${game} ${mode} URL မရှိပါ`);return}
+
+  state.currentGame=game;
+  state.currentMode=mode;
+
+  selectAiGame(game);
+  selectAiMode(mode);
+  $('gameFrame').src=url;
+  $('gameView').classList.add('open');
+  document.body.style.overflow='hidden';
+  closeAiPanel();
+}
+
+function closeGame(){
+  $('gameFrame').src='';
+  $('gameView').classList.remove('open');
+  document.body.style.overflow='';
+  closeAiPanel();
+}
+
+function openAiPanel(){
+  selectAiGame(state.currentGame||'777');
+  selectAiMode(state.currentMode||'WINGO');
+  $('aiPanel').classList.add('open');
+  setTimeout(()=>$('roundInput').focus(),230);
+}
+function closeAiPanel(){$('aiPanel').classList.remove('open')}
+
+function renderDigits(digits){
+  const grid=$('digitGrid');
+  grid.innerHTML='';
+  if(!Array.isArray(digits)){
+    for(let i=0;i<10;i++){
+      const d=document.createElement('div');
+      d.className='digit';
+      d.innerHTML=`<div class="digit-number">${i}</div><div class="digit-percent">0%</div>`;
+      grid.appendChild(d);
+    }
+    return;
+  }
+  const map=new Map(digits.map(x=>[Number(x.digit),x]));
+  for(let i=0;i<10;i++){
+    const item=map.get(i)||{};
+    const d=document.createElement('div');
+    d.className='digit';
+    d.innerHTML=`<div class="digit-number">${i}</div><div class="digit-percent">${Number(item.percentage||0).toFixed(2)}%</div>`;
+    grid.appendChild(d);
+  }
+}
+
+function renderResult(data){
+  const r=data.result||{};
+  let big=Number(r.bigPercentage??r.big_percent??r.bigProbability??r.big_probability??r.percentage??0);
+  let small=Number(r.smallPercentage??r.small_percent??r.smallProbability??r.small_probability??(100-big));
+  if(!Number.isFinite(big))big=0;
+  if(!Number.isFinite(small))small=0;
+  if(big===0&&small===0){big=50;small=50}
+  const total=big+small;
+  if(total>0){big=big/total*100;small=small/total*100}
+
+  $('bigPercent').textContent=big.toFixed(0)+'%';
+  $('smallPercent').textContent=small.toFixed(0)+'%';
+  $('matched').textContent=Number(r.matched||0);
+  $('bigCount').textContent=Number(r.big||0);
+  $('smallCount').textContent=Number(r.small||0);
+  $('resultCoin').textContent=Number(data.user?.coin??state.user?.coin??0);
+  $('resultGame').textContent=data.game||state.aiGame||'—';
+  $('resultMode').textContent=data.mode||state.aiMode||'—';
+  renderDigits(r.digits);
+  $('result').classList.add('show');
+}
+
+async function analyze(){
+  const input=$('roundInput').value.trim();
+  if(!/^\d{2}$/.test(input)){
+    showToast('နောက်ဆုံး 2 လုံးကို ထည့်ပါ။ ဥပမာ 26');
+    $('roundInput').focus();
+    return;
+
+  }
+
+  const button=$('analyzeBtn');
+  const again=$('analyzeAgain');
+  button.disabled=true;
+  button.textContent='⏳';
+  again.classList.add('loading');
+  again.textContent='⏳ ANALYZING...';
+
+  state.currentGame=state.aiGame;
+  state.currentMode=state.aiMode;
+
+  try{
+    const data=await api('/api/analyze',{
+      method:'POST',
+      body:JSON.stringify({
+        game:state.aiGame,
+        mode:state.aiMode,
+        input
+      })
+    });
+    state.user=data.user;
+    renderUser();
+    renderResult(data);
+    showToast('✅ Analysis Complete');
+  }catch(error){
+    console.error(error);
+    if(error.data?.code==='INSUFFICIENT_COIN'){
+      showToast('❌ Coin မလုံလောက်ပါ');
+    }else if(error.status===401){
+      localStorage.removeItem('xeen_session');
+      state.session='';
+      showToast('Session expired. Reloading...');
+      setTimeout(()=>location.reload(),700);
+    }else{
+      showToast(`❌ ${error.message}`);
+    }
+  }finally{
+    button.disabled=false;
+    button.textContent='🔎';
+    again.classList.remove('loading');
+    again.textContent='✨ AI PREDICTOR';
+  }
+}
+
+document.querySelectorAll('.ripple-btn').forEach(button=>{
+  button.addEventListener('click',function(event){
+    const rect=this.getBoundingClientRect();
+    const circle=document.createElement('span');
+    const size=Math.max(rect.width,rect.height);
+    circle.className='ripple';
+    circle.style.width=circle.style.height=size+'px';
+    circle.style.left=event.clientX-rect.left-size/2+'px';
+    circle.style.top=event.clientY-rect.top-size/2+'px';
+    circle.style.position='absolute';
+    circle.style.borderRadius='50%';
+    circle.style.background='rgba(255,255,255,.24)';
+    circle.style.transform='scale(0)';
+    circle.style.animation='ripple .55s linear';
+    circle.style.pointerEvents='none';
+    this.appendChild(circle);
+    setTimeout(()=>circle.remove(),600);
+  });
+});
+
+document.querySelectorAll('#bigwinModes .mode').forEach(b=>b.onclick=()=>selectMode('bigwinModes',b.dataset.mode));
+document.querySelectorAll('#miniModes .mode').forEach(b=>b.onclick=()=>selectMode('miniModes',b.dataset.mode));
+document.querySelectorAll('#aiGames .ai-choice').forEach(b=>b.onclick=()=>selectAiGame(b.dataset.game));
+document.querySelectorAll('#aiModes .ai-choice').forEach(b=>b.onclick=()=>selectAiMode(b.dataset.mode));
+
+$('bigwinPlay').onclick=()=>openGame('777',getSelectedMode('bigwinModes'));
+$('miniPlay').onclick=()=>openGame('MINI',getSelectedMode('miniModes'));
+$('gameClose').onclick=closeGame;
+
+$('aiBtn').onclick=()=> $('aiPanel').classList.contains('open')?closeAiPanel():openAiPanel();
+$('aiClose').onclick=closeAiPanel;
+$('analyzeBtn').onclick=analyze;
+$('analyzeAgain').onclick=analyze;
+
+$('roundInput').oninput=e=>{
+  e.target.value=e.target.value.replace(/\D/g,'').slice(0,2);
+};
+$('roundInput').onkeydown=e=>{
+  if(e.key==='Enter')analyze();
+  if(e.key==='Escape')closeAiPanel();
+};
+
+$('gameView').onclick=e=>{
+  if(e.target===$('gameView'))closeAiPanel();
+};
+
+$('copyBtn').onclick=async()=>{
+  if(!state.user)return;
+  try{
+    await navigator.clipboard.writeText(state.user.user_id);
+    showToast('✅ User ID copied');
+  }catch{
+    showToast('Copy မလုပ်နိုင်ပါ');
+  }
+};
+
+$('adminContact').onclick=()=>openTelegram(state.config?.contacts?.admin);
+$('developerBtn').onclick=()=>openTelegram(state.config?.contacts?.developer);
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){
+    if($('aiPanel').classList.contains('open'))closeAiPanel();
+    else if($('gameView').classList.contains('open'))closeGame();
+  }
+});
+
+async function init(){
+  try{
+    if(state.session){
+      try{await loadMe()}
+      catch{
+        localStorage.removeItem('xeen_session');
+        state.session='';
+        await createSession();
+      }
+    }else{
+      await createSession();
+    }
+    await loadConfig();
+    renderUser();
+    renderDigits([]);
+    $('loader').classList.add('hidden');
+  }catch(error){
+    console.error('Initialization error:',error);
+    $('loader').innerHTML=`
+      <div style="text-align:center">
+        <div style="font-size:36px">⚠️</div>
+        <div style="font-weight:950;font-size:14px;margin-top:8px">Connection Error</div>
+        <div style="color:#8195b1;font-size:9px;margin-top:7px">Server ကို run ထားကြောင်း စစ်ပါ။</div>
+        <button onclick="location.reload()" style="margin-top:14px;padding:10px 16px;border-radius:10px;background:#0878ff;color:white;font-weight:900">Retry</button>
+      </div>`;
+  }
+}
+
+init();
+</script>
+</body>
+</html>
