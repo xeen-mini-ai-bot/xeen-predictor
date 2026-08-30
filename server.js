@@ -47,10 +47,6 @@ if (!fs.existsSync(DB_PATH)) {
    SQLITE HELPERS
 ========================================================= */
 
-  process.env.SQLITE_BIN ||
-  '/data/data/com.termux/files/usr/bin/sqlite3';const SQLITE_BIN =
-  process.env.SQLITE_BIN || 'sqlite3';
-
 function sqlEscape(value) {
   return String(value).replace(/'/g, "''");
 }
@@ -58,7 +54,7 @@ function sqlEscape(value) {
 function runSQL(sql) {
   try {
     return execFileSync(
-      SQLITE_BIN,
+      'sqlite3',
       ['-json', DB_PATH],
       {
         input: sql,
@@ -104,7 +100,7 @@ function one(sql) {
 function exec(sql) {
   try {
     return execFileSync(
-      SQLITE_BIN,
+      'sqlite3',
       [DB_PATH],
       {
         input: sql,
@@ -118,9 +114,7 @@ function exec(sql) {
       error.stderr || error.message
     );
 
-    throw new Error(
-      'Database operation failed'
-    );
+    throw error;
   }
 }
 
