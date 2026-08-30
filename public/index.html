@@ -412,8 +412,8 @@ function renderDigits(digits){
 
 function renderResult(data){
   const r=data.result||{};
-  let big=Number(r.bigPercentage??r.big_percent??r.bigProbability??r.big_probability??r.percentage??0);
-  let small=Number(r.smallPercentage??r.small_percent??r.smallProbability??r.small_probability??(100-big));
+  let big=Number(r.big||0);
+  let small=Number(r.small||0);
   if(!Number.isFinite(big))big=0;
   if(!Number.isFinite(small))small=0;
   if(big===0&&small===0){big=50;small=50}
@@ -460,7 +460,10 @@ async function analyze(){
         input
       })
     });
-    state.user=data.user;
+    
+console.log('PREDICT API RESULT:', JSON.stringify(data, null, 2));
+
+state.user=data.user;
     renderUser();
     renderResult(data);
     showToast('✅ Analysis Complete');
