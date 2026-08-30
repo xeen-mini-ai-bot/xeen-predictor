@@ -3,5 +3,4 @@ node_modules/
 *.log
 database/*.db-shm
 database/*.db-wal
-database/*.db
 .env
