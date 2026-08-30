@@ -4,7 +4,7 @@
   "description": "Xeen AI Mini Predictor",
   "main": "server.js",
   "scripts": {
-    "start": "node bot.js",
+    "start": "node server.js",
     "init-db": "node database/init.js"
   },
   "engines": {
