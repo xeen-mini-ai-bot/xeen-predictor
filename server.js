@@ -47,9 +47,9 @@ if (!fs.existsSync(DB_PATH)) {
    SQLITE HELPERS
 ========================================================= */
 
-const SQLITE_BIN =
   process.env.SQLITE_BIN ||
-  '/data/data/com.termux/files/usr/bin/sqlite3';
+  '/data/data/com.termux/files/usr/bin/sqlite3';const SQLITE_BIN =
+  process.env.SQLITE_BIN || 'sqlite3';
 
 function sqlEscape(value) {
   return String(value).replace(/'/g, "''");
